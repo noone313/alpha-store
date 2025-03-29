@@ -1,0 +1,131 @@
+<style>
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --dark-text: #2C3E50;
+      --nav-shadow: 0 4px 20px rgba(45, 66, 99, 0.1);
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      padding: 0.8rem 4%;
+      box-shadow: var(--nav-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(45, 66, 99, 0.08);
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      position: relative;
+    }
+    
+    .logo a {
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .logo a::before {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+    
+    .logo a:hover::before {
+      width: 100%;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-links a {
+      position: relative;
+      color: var(--dark-text);
+      font-weight: 600;
+      padding: 0.8rem 0;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 3px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .nav-links a.active {
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+    .logo i {
+      color: var(--secondary);
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.2rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.95rem;
+        padding: 0.5rem;
+      }
+    }
+    </style>
+    
+    <nav class="navbar">
+      <div class="logo">
+        <a href="/">
+            <i class="fas fa-store"></i>
+          ALPHA STORE
+        </a>
+      </div>
+      
+      <ul class="nav-links">
+        <li><a href="/" class="active">الرئيسية</a></li>
+        <li><a href="/about">من نحن</a></li>
+        <li><a href="/contact">اتصل بنا</a></li>
+      </ul>
+    </nav>

@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متجر إلكتروني</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --light-bg: #F8F9FA;
+      --dark-text: #2C3E50;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --success: #28a745;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+      --border-radius: 10px;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+
+    a {
+            text-decoration: none;
+        }
+    
+    .container {
+      width: 92%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* شريط التنقل المحدّث */
+    .navbar {
+      background: var(--white);
+      padding: 1rem 0;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .logo i {
+      color: var(--secondary);
+    }
+    
+    .search-container {
+      flex: 1;
+      max-width: 700px;
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: var(--gray-100);
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(45,66,99,0.1);
+      outline: none;
+      background-color: var(--white);
+    }
+    
+    .search-btn {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .action-btn {
+      position: relative;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    
+    .action-btn:hover {
+      background-color: var(--gray-100);
+      transform: translateY(-2px);
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--secondary);
+      color: white;
+      font-size: 0.7rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* قائمة الفئات المحدثة */
+    .categories-nav {
+      background: var(--white);
+      margin-top: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .categories-list {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+      padding: 0.8rem 1rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    
+    .categories-list::-webkit-scrollbar {
+      height: 5px;
+    }
+    
+    .categories-list::-webkit-scrollbar-thumb {
+      background-color: var(--gray-300);
+      border-radius: 10px;
+    }
+    
+    .category-item {
+      color: var(--dark-text);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    
+    .category-item:hover {
+      background: rgba(45,66,99,0.1);
+      color: var(--primary);
+    }
+    
+    .category-item.active {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(45,66,99,0.2);
+    }
+    
+    /* بطاقات المنتجات المحدثة */
+    .hero-section {
+      margin-top: 2rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      height: 400px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      margin-bottom: 2.5rem;
+    }
+    
+    .hero-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 500px;
+    }
+    
+    .hero-btn {
+      background: white;
+      color: var(--primary);
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      align-self: flex-start;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .hero-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 4px;
+      background-color: var(--secondary);
+      border-radius: 10px;
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .discount-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--secondary);
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      z-index: 2;
+    }
+    
+    .wishlist-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: white;
+      color: var(--dark-text);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      z-index: 2;
+      transition: all 0.2s ease;
+    }
+    
+    .wishlist-btn:hover {
+      color: var(--secondary);
+      transform: scale(1.1);
+    }
+    
+    .product-image-container {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+    
+    .product-info {
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    
+    .product-category {
+      color: var(--primary);
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .product-title {
+      font-size: 1.1rem;
+      color: var(--dark-text);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+    
+    .product-price-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .product-price {
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+    
+    .product-old-price {
+      color: var(--gray-300);
+      text-decoration: line-through;
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+    
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+      color: #f39c12;
+    }
+    
+    .product-rating .fas {
+      font-size: 0.8rem;
+    }
+    
+    .rating-count {
+      color: var(--dark-text);
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    
+    .product-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 0.8rem;
+    }
+    
+    .add-to-cart {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .add-to-cart:hover {
+      background: #1E2E4A;
+      transform: translateY(-2px);
+    }
+    
+    .quick-view-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--light-bg);
+      color: var(--dark-text);
+      border-radius: var(--border-radius);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-view-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* تصميم القدم - Footer */
+    .footer {
+      background: var(--primary);
+      color: white;
+      padding: 3rem 0 1.5rem;
+      margin-top: 3rem;
+    }
+    
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      height: 3px;
+      background-color: var(--secondary);
+      border-radius: 10px;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-link {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-link a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-link a:hover {
+      color: white;
+    }
+    
+    .footer-contacts {
+      list-style: none;
+    }
+    
+    .footer-contact {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-contact i {
+      font-size: 1.2rem;
+      color: var(--secondary);
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* تصميم متجاوب - Responsive Design */
+    @media (max-width: 991px) {
+      .hero-section {
+        height: 320px;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .logo-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .hero-section {
+        height: auto;
+        padding: 3rem 0;
+      }
+      
+      .hero-content {
+        position: relative;
+        padding: 2rem;
+      }
+      
+      .hero-title {
+        font-size: 1.8rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .product-actions {
+        flex-direction: column;
+      }
+      
+      .quick-view-btn {
+        width: 100%;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+    }
+     /* قائمة المستخدم */
+  .user-profile-panel {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    width: 300px;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+  }
+
+  .user-profile-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(10px);
+  }
+
+  .user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+  }
+
+  .user-info h3 {
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .user-info p {
+    color: var(--dark-text);
+    font-size: 0.9rem;
+  }
+
+  .user-profile-links {
+    list-style: none;
+    border-top: 1px solid var(--gray-200);
+    padding-top: 1rem;
+  }
+
+  .user-profile-link {
+    padding: 0.8rem;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+  }
+
+  .user-profile-link:hover {
+    background: var(--gray-100);
+  }
+
+  .user-profile-link a {
+    color: var(--dark-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .logout-btn {
+    color: var(--secondary) !important;
+    font-weight: 700;
+  }
+  </style>
+</head>
+<body>
+  <!-- شريط التنقل -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="logo-actions">
+        <a href="#" class="logo">
+          <i class="fas fa-store"></i>
+          ALPHA STORE
+        </a>
+        
+
+          <div class="user-actions">
+            <div class="user-profile-wrapper" style="position:relative;">
+              <button class="action-btn" id="userProfileBtn">
+                <i class="fas fa-user"></i>
+              </button>
+              
+              <!-- قائمة المستخدم -->
+              <div class="user-profile-panel" id="userProfilePanel">
+                <div class="user-profile-header">
+                  <img src="/<%= userinfo.userImage %>" class="user-avatar" alt="صورة المستخدم">
+                  <div class="user-info">
+                    <h3><%= userinfo.userName %></h3>
+                    <p><%= userinfo.email %></p>
+                  </div>
+                </div>
+                
+                <ul class="user-profile-links">
+                  <li class="user-profile-link">
+                    <a href="/profile">
+                      <i class="fas fa-user-circle"></i>
+                      الملف الشخصي
+                    </a>
+                  </li>
+                  <li class="user-profile-link">
+                    <a href="/yourOrders">
+                      <i class="fas fa-box-open"></i>
+                      الطلبات
+                    </a>
+                  </li>
+                
+                  <li class="user-profile-link">
+                    <a href="/logout" class="logout-btn">
+                      <i class="fas fa-sign-out-alt"></i>
+                      تسجيل الخروج
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+      </div>
+      
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="ابحث عن أي منتج...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- المحتوى الرئيسي -->
+  <div class="container">
+    <!-- قسم البطل -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">تسوق بكل راحة وأمان</h1>
+        <p class="hero-subtitle">أفضل المنتجات بأسعار تنافسية وخصومات حصرية. تصفح تشكيلتنا الجديدة اليوم!</p>
+        <button class="hero-btn">تسوق الآن</button>
+      </div>
+    </div>
+
+    <!-- قسم الفئات -->
+    <nav class="categories-nav">
+      <ul class="categories-list">
+        <a href="/categories"><li class="category-item active">كل الاقسام</li></a>
+        <% categories.forEach(function(category) { %>
+          <a href="/categories/<%= category.categoryId %>"><li class="category-item"><%= category.categoryName %></li></a>
+        <% }); %>
+      </ul>
+    </nav>
+
+    <!-- قسم المنتجات -->
+    <section>
+      <h2 class="section-title">كل منتجاتنا</h2>
+     
+      <div class="products-grid">
+        <% products.forEach(function(product) { %>
+          <a href="/products/<%= product.productId %>">
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/<%= product.productImage %>" class="product-image" alt="<%= product.productName %>">
+          </div>
+          
+          <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+          
+          <div class="product-info">
+            <span class="product-category"><%= product.Category.categoryName %></span>
+            <h3 class="product-title"><%= product.productName %></h3>
+            
+            <div class="product-price-container">
+              <span class="product-price"><%= product.productPrice %> د.ع</span>
+            </div>
+            
+            <div class="product-actions">
+              <button class="add-to-cart">
+                <i class="fas fa-eye"></i>
+               عرض المنتج
+              </button>
+              
+            </div>
+          </div>
+        </div>
+      </a>
+        <% }); %>
+      </div>
+    </section>
+  </div>
+
+  <!-- القدم - Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3 class="footer-title">من نحن</h3>
+          <p>ALPHA STORE هو وجهتك الأولى للتسوق الإلكتروني بأسعار منافسة وجودة عالية مع خدمة عملاء متميزة.</p>
+          
+          <div class="footer-social">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">روابط سريعة</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="#">الصفحة الرئيسية</a></li>
+            <li class="footer-link"><a href="#">منتجاتنا</a></li>
+            <li class="footer-link"><a href="#">العروض الخاصة</a></li>
+            <li class="footer-link"><a href="#">من نحن</a></li>
+            <li class="footer-link"><a href="#">تواصل معنا</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">خدمة العملاء</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="#">طرق الدفع</a></li>
+            <li class="footer-link"><a href="#">سياسة الضمان</a></li>
+            <li class="footer-link"><a href="#">سياسة الشحن</a></li>
+            <li class="footer-link"><a href="#">الأسئلة الشائعة</a></li>
+            <li class="footer-link"><a href="#">سياسة الخصوصية</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">اتصل بنا</h3>
+          <ul class="footer-contacts">
+            <li class="footer-contact">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>بغداد , جمهورية العراق</span>
+            </li>
+            <li class="footer-contact">
+              <i class="fas fa-phone-alt"></i>
+              <span>+009647772185225</span>
+            </li>
+            <li class="footer-contact">
+              <i class="fas fa-envelope"></i>
+              <span>baqer313@store.com</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        جميع الحقوق محفوظة &copy; 2025 ALPHA STORE
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // إدارة قائمة المستخدم
+    const userProfileBtn = document.getElementById('userProfileBtn');
+    const userProfilePanel = document.getElementById('userProfilePanel');
+  
+    userProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userProfilePanel.classList.toggle('active');
+    });
+  
+    // إغلاق القائمة عند النقر خارجها
+    document.addEventListener('click', (e) => {
+      if (!userProfilePanel.contains(e.target) && !userProfileBtn.contains(e.target)) {
+        userProfilePanel.classList.remove('active');
+      }
+    });
+  
+    // إغلاق القائمة عند النقر على أي عنصر داخلي
+    userProfilePanel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        userProfilePanel.classList.remove('active');
+      });
+    });
+  </script>
+
+<script>
+  // عند النقر على زر البحث
+  document.querySelector('.search-btn').addEventListener('click', function(e) {
+    e.preventDefault(); // منع السلوك الافتراضي للزر
+    const searchInput = document.querySelector('.search-input');
+    const searchParam = searchInput.value.trim();
+    
+    // التأكد من إدخال قيمة في حقل البحث
+    if (searchParam) {
+      // إعادة التوجيه مع ترميز قيمة البحث في الرابط
+      window.location.href = `/search/${searchParam}`;
+    } else {
+      alert("يرجى إدخال مصطلح البحث");
+    }
+  });
+</script>
+</body>
+</html>

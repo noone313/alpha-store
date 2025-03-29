@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>نتائج البحث - ALPHA STORE</title>
+  
+  <!-- تحسين تحميل الموارد -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-...">
+  
+  <style>
+    /* إضافة تحسينات الوصول */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* تحديث تسلسل العناوين */
+    .product-title {
+      font-size: 1.2rem;
+    }
+    
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --light-bg: #F8F9FA;
+      --dark-text: #2C3E50;
+      --gray-300: #dee2e6;
+      --white: #ffffff;
+      --border-radius: 10px;
+      --transition: all 0.3s ease;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    
+    body {
+      background: var(--light-bg);
+      color: var(--dark-text);
+      padding: 2rem;
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 4px;
+      background-color: var(--secondary);
+      border-radius: var(--border-radius);
+    }
+    
+    .search-results {
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      color: var(--dark-text);
+    }
+
+    .sort-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .sort-container select {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image-container {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      padding: 1.2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-category {
+      color: var(--primary);
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      color: var(--dark-text);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .product-price-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+
+    .product-old-price {
+      color: var(--gray-300);
+      text-decoration: line-through;
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+
+    .update-btn {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      display: inline-block;
+      margin-top: auto;
+    }
+
+    .update-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      font-size: 1.2rem;
+      color: var(--gray-300);
+    }
+
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="container">
+    <h1 class="section-title">نتائج البحث</h1>
+
+    <div class="search-results" aria-live="polite">
+      <% if (products.length > 0) { %>
+        <p role="status"> <%= products.length.toLocaleString() %> من نتائج البحث عن "<%= searchParam %>"</p>
+      <% } else { %>
+        <p class="no-results" role="alert">⚠️ لم يتم العثور على نتائج</p>
+      <% } %>
+    </div>
+
+    <!-- تحديث قائمة الترتيب -->
+    <div class="sort-container">
+      <label for="sort-by" class="visually-hidden">ترتيب حسب</label>
+      <select id="sort-by" aria-label="معيار الترتيب">
+        <option value="name" <%= queryParams.sortBy === 'name' ? 'selected' : '' %>>الاسم</option>
+        <option value="price" <%= queryParams.sortBy === 'price' ? 'selected' : '' %>>السعر</option>
+        <option value="discount" <%= queryParams.sortBy === 'discount' ? 'selected' : '' %>>الخصم</option>
+      </select>
+
+      <label for="order" class="visually-hidden">اتجاه الترتيب</label>
+      <select id="order" aria-label="اتجاه الترتيب">
+        <option value="asc" <%= queryParams.order === 'asc' ? 'selected' : '' %>>تصاعدي</option>
+        <option value="desc" <%= queryParams.order === 'desc' ? 'selected' : '' %>>تنازلي</option>
+      </select>
+    </div>
+
+    <% if (products.length > 0) { %>
+      <section class="products-grid" aria-label="المنتجات المطابقة">
+        <% products.forEach(product => { %>
+          <article class="product-card">
+            <div class="product-image-container">
+              <img src="/<%= product.productImage %>" 
+                   alt="<%= product.productName %>"
+                   loading="lazy"
+                   class="product-image">
+            </div>
+            <div class="product-info">
+              <span class="product-category">
+                <%= product.Category?.categoryName || 'غير مصنف' %>
+              </span>
+              <h2 class="product-title"><%= product.productName %></h2>
+              <div class="product-price-container">
+                <span class="product-price">
+                  <%= product.productPrice.toLocaleString() %> د.ع
+                </span>
+                <% if(product.productDiscount) { %>
+                  <span class="product-old-price">
+                    <%= (product.productPrice + product.productDiscount).toLocaleString() %> د.ع
+                  </span>
+                <% } %>
+              </div>
+              <a href="/products/<%= product.productId %>" 
+                 class="update-btn"
+                 aria-label="تفاصيل <%= product.productName %>">
+                <i class="fas fa-chevron-left"></i> عرض المنتج
+              </a>
+            </div>
+          </article>
+        <% }) %>
+      </section>
+    <% } %>
+  </main>
+
+  <script>
+    // إضافة Debounce لإدارة الأحداث
+    const debounce = (func, delay = 300) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+      };
+    };
+
+    // تحديث معاملات البحث مع الحفاظ على المعايير الحالية
+    const updateSorting = debounce(() => {
+      const params = new URLSearchParams({
+        sortBy: document.getElementById('sort-by').value,
+        order: document.getElementById('order').value,
+        // إضافة معايير إضافية هنا إذا لزم الأمر
+      });
+      
+      window.location.href = `${window.location.pathname}?${params.toString()}`;
+    });
+
+    // إضافة Event Listeners
+    document.querySelectorAll('#sort-by, #order').forEach(element => {
+      element.addEventListener('change', updateSorting);
+    });
+  </script>
+</body>
+</html>

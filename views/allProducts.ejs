@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم المنتجات - ALPHA STORE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --light-bg: #F8F9FA;
+      --dark-text: #2C3E50;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+      --border-radius: 10px;
+      --transition: all 0.3s ease;
+    }
+    body {
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+    }
+    .container {
+      width: 92%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    /* عنوان الصفحة */
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 4px;
+      background-color: var(--secondary);
+      border-radius: 10px;
+    }
+    /* شبكة المنتجات */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    /* بطاقة المنتج */
+    .product-card {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+    .product-image-container {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      position: relative;
+    }
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+    .product-info {
+      padding: 1.2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .product-category {
+      color: var(--primary);
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .product-title {
+      font-size: 1.1rem;
+      color: var(--dark-text);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+    .product-price-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .product-price {
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+    .product-old-price {
+      color: var(--gray-300);
+      text-decoration: line-through;
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+    /* زر تحديث المنتج */
+    .update-btn {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      display: inline-block;
+      margin-top: auto;
+    }
+    .update-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+   
+    <%- include('partials/navbar') %>
+
+
+
+  <!-- المحتوى الرئيسي -->
+  <div class="container">
+    <h2 class="section-title">تحديث المنتجات</h2>
+    <div class="products-grid">
+      <% products.forEach(function(product) { %>
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="/<%= product.productImage %>" alt="<%= product.productName %>" class="product-image">
+          </div>
+          <div class="product-info">
+            <span class="product-category">
+              <%= product.Category ? product.Category.categoryName : 'غير مصنف' %>
+            </span>
+            <h3 class="product-title"><%= product.productName %></h3>
+            <div class="product-price-container">
+              <span class="product-price"><%= product.productPrice %> د.ع</span>
+              <% if(product.productDiscount) { %>
+                <span class="product-old-price">
+                  <%= product.productPrice %> د.ع
+                </span>
+              <% } %>
+            </div>
+            <a href="/dashboard/updateProducts/<%= product.productId %>" class="update-btn">
+              <i class="fas fa-edit"></i> تحديث
+            </a>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</body>
+</html>

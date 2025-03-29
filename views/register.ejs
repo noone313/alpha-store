@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل مستخدم جديد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        :root {
+            --primary: #2D4263;
+            --secondary: #C84B31;
+            --light-bg: #F8F9FA;
+            --dark-text: #2C3E50;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* تصميم الفورم */
+        .register-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .form-title {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(45,66,99,0.1);
+            outline: none;
+        }
+
+        /* تصميم تحميل الصورة */
+        .image-upload {
+            position: relative;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .upload-label {
+            display: inline-block;
+            background: var(--light-bg);
+            color: var(--primary);
+            padding: 1.5rem 2rem;
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-label:hover {
+            background: #f0f4f9;
+            border-color: var(--primary);
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .preview-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 1rem;
+            border: 3px solid var(--primary);
+        }
+
+        /* زر التسجيل */
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #1E2E4A;
+        }
+
+        /* الروابط الإضافية */
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--dark-text);
+        }
+
+        .login-link a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .register-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <%- include('partials/navbar') %>
+
+    <!-- فورم التسجيل -->
+    <div class="register-container">
+        <h1 class="form-title">إنشاء حساب جديد</h1>
+        
+        <form method="post" action="/register" id="registerForm" enctype="multipart/form-data">
+            <!-- حقل الصورة -->
+            <div class="image-upload">
+                <label class="upload-label">
+                    <i class="fas fa-camera"></i><br>
+                    <span>انقر لتحميل الصورة الشخصية</span>
+                    <input type="file" name="userImage" class="upload-input" id="userImage" accept="image/*">
+                </label>
+                <img src="" class="preview-image" id="imagePreview" style="display: none;">
+            </div>
+
+            <!-- الحقول الأخرى -->
+            <div class="form-group">
+                <label class="input-label">اسم المستخدم</label>
+                <input type="text" name="userName" class="form-input" id="userName" required>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">رقم الجوال</label>
+                <input type="tel" name="mobile" class="form-input" id="mobile" required>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">البريد الإلكتروني</label>
+                <input type="email" name="email" class="form-input" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">كلمة المرور</label>
+                <input type="password" name="password" class="form-input" id="password" required>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">العنوان</label>
+                <input type="text" name="address" class="form-input" id="address" required>
+            </div>
+
+            <button type="submit" class="submit-btn">تسجيل الحساب</button>
+        </form>
+
+        <div class="login-link">
+            لديك حساب بالفعل؟ <a href="/login">سجل الدخول هنا</a>
+        </div>
+    </div>
+
+    <script>
+        // عرض معاينة الصورة
+        const uploadInput = document.getElementById('userImage');
+        const imagePreview = document.getElementById('imagePreview');
+
+        uploadInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.style.display = 'block';
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

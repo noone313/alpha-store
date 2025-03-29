@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الطلبات - ALPHA STORE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --light-bg: #F8F9FA;
+      --dark-text: #2C3E50;
+      --white: #ffffff;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+      --shadow-md: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    body {
+      background: var(--light-bg);
+      color: var(--dark-text);
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius);
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      transition: var(--transition);
+      border: 2px solid transparent;
+    }
+    .btn:hover {
+      background: var(--secondary);
+    }
+    .btn.active {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-danger {
+      background: var(--secondary);
+    }
+    .btn-danger:hover {
+      background: #a53d28;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+    table th {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1rem;
+      border: 1px solid var(--primary);
+    }
+    table td {
+      padding: 1rem;
+      border: 1px solid #eee;
+      text-align: center;
+    }
+    .status-indicator {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .status-indicator.true {
+      background: #2ecc7133;
+      color: #27ae60;
+    }
+    .status-indicator.false {
+      background: #e74c3c33;
+      color: #c0392b;
+    }
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .no-orders {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+    .product-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #eee;
+    }
+    .product-name {
+      font-weight: 500;
+      color: var(--primary);
+    }
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  <br>
+  <div class="container">
+    <h1>📦 لوحة تحكم الطلبات</h1>
+
+    <div class="button-group">
+      <a href="/dashboard/orders/true" class="btn <%= orderStatus === 'true' ? 'active' : '' %>">الجاهزة</a>
+      <a href="/dashboard/orders/false" class="btn <%= orderStatus === 'false' ? 'active' : '' %>">غير الجاهزة</a>
+    </div>
+
+    <% if (orders && orders.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>اسم المنتج</th> 
+            <th>صورة المنتج</th> 
+            <th>السعر</th> 
+            <th>الكمية</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% orders.forEach(order => { %>
+            <tr>
+              <td>#<%= order.orderId %></td>
+              
+              <td class="product-name">
+                <% if (order.OrderItems && order.OrderItems.length && order.OrderItems[0].Product && order.OrderItems[0].Product.productName) { %>
+                  <%= order.OrderItems[0].Product.productName %>
+                <% } else { %>
+                  غير معروف
+                <% } %>
+              </td>
+              
+              <td>
+                <% if (order.OrderItems && order.OrderItems.length && order.OrderItems[0].Product && order.OrderItems[0].Product.productImage) { %>
+                  <img 
+                    src="/<%= order.OrderItems[0].Product.productImage %>" 
+                    class="product-image" 
+                    alt="<%= order.OrderItems[0].Product.productName %>"
+                  >
+                <% } else { %>
+                  <div class="no-image">لا توجد صورة</div>
+                <% } %>
+              </td>
+
+              <td>
+                <% if (order.OrderItems && order.OrderItems.length && order.OrderItems[0].Product && order.OrderItems[0].Product.productPrice) { %>
+                  <%= order.OrderItems[0].Product.productPrice %> د.ع
+                <% } else { %>
+                  غير متوفر
+                <% } %>
+              </td>
+
+              <td>
+                <% if (order.OrderItems[0].quantity) { %>
+                  <%= order.OrderItems[0].quantity %> 
+                <% } else { %>
+                  غير متوفر
+                <% } %>
+              </td>
+
+              <td>
+                <span class="status-indicator <%= order.orderstatus %>">
+                  <%= order.orderstatus ? 'جاهزة' : 'غير جاهزة' %>
+                </span>
+              </td>
+              
+              <td class="action-btns">
+                  
+                <form action="/dashboard/updateOrderStatus" method="POST" onsubmit="return confirm('هل أنت متأكد من ان الطلب اكتمل');">
+                  <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                  <input type="hidden" name="orderStatus" value="<%= order.orderstatus ? 'false' : 'true' %>">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                  </button>
+                </form>
+
+                 
+              
+                <form action="/dashboard/deleteOrder" method="POST" onsubmit="return confirm('هل أنت متأكد من الحذف؟');">
+                  <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <div class="no-orders">
+        <i class="fas fa-box-open fa-3x"></i>
+        <p>لا توجد طلبات لعرضها</p>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الفئات - ALPHA STORE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2D4263;
+      --secondary: #C84B31;
+      --light-bg: #F8F9FA;
+      --dark-text: #2C3E50;
+      --white: #ffffff;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+      --shadow-md: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+    body {
+      background: var(--light-bg);
+      color: var(--dark-text);
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+    table thead {
+      background: var(--primary);
+      color: var(--white);
+    }
+    table th, table td {
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--light-bg);
+    }
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .btn {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .btn:hover {
+      background: var(--secondary);
+    }
+    .btn-danger {
+      background: #C84B31;
+    }
+    .btn-danger:hover {
+      background: #e94e1b;
+    }
+    .create-btn {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+    .create-btn:hover {
+      background: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <h1>لوحة تحكم الفئات</h1>
+
+  
+
+    <% if (categories && categories.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الفئة</th>
+            <th>الصورة</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach(function(category) { %>
+            <tr>
+              <td><%= category.categoryName %></td>
+              <td>
+                <% if (category.categoryImage) { %>
+                  <img src="/<%= category.categoryImage %>" alt="<%= category.categoryName %>" width="80">
+                <% } else { %>
+                  لا توجد صورة
+                <% } %>
+              </td>
+              <td class="action-btns">
+                <a href="/dashboard/updateCategory/<%= category.categoryId %>" class="btn">تعديل</a>
+                <form action="/deleteCategory" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفئة؟');" style="display: inline;">
+                  <input type="hidden" name="categoryId" value="<%= category.categoryId %>">
+                  <button type="submit" class="btn btn-danger">حذف</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p style="text-align: center;">لا توجد فئات حالياً.</p>
+    <% } %>
+
+    <div style="text-align: center;">
+      <a href="/dashboard/add_categories" class="create-btn">إضافة فئة جديدة</a>
+    </div>
+  </div>
+</body>
+</html>
